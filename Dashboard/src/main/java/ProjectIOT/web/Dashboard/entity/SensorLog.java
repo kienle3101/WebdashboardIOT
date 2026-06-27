@@ -1,4 +1,4 @@
-package ProjectIOT.web.Dashboard.Entity;
+package ProjectIOT.web.Dashboard.entity;
 
 import java.time.LocalDateTime;
 

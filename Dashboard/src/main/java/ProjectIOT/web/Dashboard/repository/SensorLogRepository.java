@@ -1,6 +1,6 @@
-package ProjectIOT.web.Dashboard.Repository;
+package ProjectIOT.web.Dashboard.repository;
 
-import ProjectIOT.web.Dashboard.Entity.SensorLog;
+import ProjectIOT.web.Dashboard.entity.SensorLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

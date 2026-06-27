@@ -1,0 +1,70 @@
+package ProjectIOT.web.Dashboard.Configuration;
+
+import ProjectIOT.web.Dashboard.entity.Role;
+import ProjectIOT.web.Dashboard.entity.User;
+import ProjectIOT.web.Dashboard.repository.RoleRepository;
+import ProjectIOT.web.Dashboard.repository.UserRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.HashSet;
+
+@Configuration
+@RequiredArgsConstructor
+@Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class ApplicationInitConfig {
+
+    PasswordEncoder passwordEncoder;
+    RoleRepository roleRepository;
+
+    @Bean
+    ApplicationRunner applicationRunner(UserRepository userRepository) {
+        return args -> {
+            // Seed USER role
+            Role userRole = roleRepository.findById("USER")
+                .orElseGet(() -> roleRepository.save(
+                    Role.builder()
+                        .name("USER")
+                        .description("Student role")
+                        .build()
+                ));
+
+            // Seed ADMIN role
+            Role adminRole = roleRepository.findById("ADMIN")
+                .orElseGet(() -> roleRepository.save(
+                    Role.builder()
+                        .name("ADMIN")
+                        .description("Admin role")
+                        .build()
+                ));
+
+            // Seed admin user
+            var existingAdmin = userRepository.findByUsername("admin");
+            if (existingAdmin.isEmpty()) {
+                HashSet<Role> roles = new HashSet<>();
+                roles.add(adminRole);
+
+                User user = User.builder()
+                        .username("admin")
+                        .password(passwordEncoder.encode("admin123"))
+                        .roles(roles)
+                        .build();
+
+                userRepository.save(user);
+                log.warn("admin user created with password: admin123");
+            } else {
+                User adminUser = existingAdmin.get();
+                adminUser.setPassword(passwordEncoder.encode("admin123"));
+                userRepository.save(adminUser);
+                log.warn("admin password updated to: admin123");
+            }
+        };
+    }
+}

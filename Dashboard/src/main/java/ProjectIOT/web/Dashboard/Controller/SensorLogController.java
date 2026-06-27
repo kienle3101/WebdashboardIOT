@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ProjectIOT.web.Dashboard.Entity.SensorLog;
-import ProjectIOT.web.Dashboard.Service.SensorLogService;
-import ProjectIOT.web.Dashboard.dto.SensorDataRequest;
+import ProjectIOT.web.Dashboard.entity.SensorLog;
+import ProjectIOT.web.Dashboard.service.SensorLogService;
+import ProjectIOT.web.Dashboard.dto.request.SensorDataRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController

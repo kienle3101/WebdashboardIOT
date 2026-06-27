@@ -1,4 +1,4 @@
-package ProjectIOT.web.Dashboard.dto;
+package ProjectIOT.web.Dashboard.dto.request;
 
 import lombok.*;
 

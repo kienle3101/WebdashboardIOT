@@ -1,8 +1,8 @@
-package ProjectIOT.web.Dashboard.Service;
+package ProjectIOT.web.Dashboard.service;
 
-import ProjectIOT.web.Dashboard.Entity.SensorLog;
-import ProjectIOT.web.Dashboard.Repository.SensorLogRepository;
-import ProjectIOT.web.Dashboard.dto.SensorDataRequest;
+import ProjectIOT.web.Dashboard.entity.SensorLog;
+import ProjectIOT.web.Dashboard.repository.SensorLogRepository;
+import ProjectIOT.web.Dashboard.dto.request.SensorDataRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
