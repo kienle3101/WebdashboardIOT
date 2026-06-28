@@ -32,7 +32,7 @@ public class ApplicationInitConfig {
                 .orElseGet(() -> roleRepository.save(
                     Role.builder()
                         .name("USER")
-                        .description("Student role")
+                        .description("user role")
                         .build()
                 ));
 

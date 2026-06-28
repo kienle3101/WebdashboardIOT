@@ -180,6 +180,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     role.getPermissions()
                             .forEach(permission -> stringJoiner.add(permission.getName()));
             });
+        if (user.getPermissions() != null) {
+            user.getPermissions().forEach(permission ->
+                    stringJoiner.add(permission.getName())
+            );
+        }
 
         return stringJoiner.toString();
     }

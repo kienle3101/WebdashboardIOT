@@ -1,9 +1,9 @@
 package ProjectIOT.web.Dashboard.Controller;
 
 import ProjectIOT.web.Dashboard.dto.request.User.UserCreationRequest;
+import ProjectIOT.web.Dashboard.dto.request.User.UserPermissionUpdateRequest;
 import ProjectIOT.web.Dashboard.dto.response.Auth.ApiResponse;
 import ProjectIOT.web.Dashboard.dto.response.PageResponse;
-import ProjectIOT.web.Dashboard.dto.response.User.StorageUsageResponse;
 import ProjectIOT.web.Dashboard.dto.response.User.UserResponse;
 import ProjectIOT.web.Dashboard.service.User.UserService;
 import jakarta.validation.Valid;
@@ -83,4 +83,16 @@ public class UserController {
                         .build());
     }
 
+    @PatchMapping("/{userId}/permissions")
+    public ResponseEntity<ApiResponse<UserResponse>> updateUserPermissions(
+            @PathVariable String userId,
+            @RequestBody @Valid UserPermissionUpdateRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.<UserResponse>builder()
+                        .code(1000)
+                        .message("Update user permissions successfully")
+                        .result(userService.updateUserPermissions(userId, request))
+                        .build());
+    }
 }

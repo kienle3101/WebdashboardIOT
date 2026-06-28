@@ -1,11 +1,13 @@
 package ProjectIOT.web.Dashboard.service.User.impl;
 
 import ProjectIOT.web.Dashboard.dto.request.User.UserCreationRequest;
+import ProjectIOT.web.Dashboard.dto.request.User.UserPermissionUpdateRequest;
 import ProjectIOT.web.Dashboard.dto.response.PageResponse;
-import ProjectIOT.web.Dashboard.dto.response.User.StorageUsageResponse;
 import ProjectIOT.web.Dashboard.dto.response.User.UserResponse;
+import ProjectIOT.web.Dashboard.entity.Permission;
 import ProjectIOT.web.Dashboard.entity.Role;
 import ProjectIOT.web.Dashboard.entity.User;
+import ProjectIOT.web.Dashboard.enums.PermissionName;
 import ProjectIOT.web.Dashboard.exception.AppException;
 import ProjectIOT.web.Dashboard.exception.ErrorCode;
 import ProjectIOT.web.Dashboard.mapper.UserMapper;
@@ -26,6 +28,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -36,6 +40,7 @@ public class UserServiceImpl implements UserService {
     RoleRepository roleRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+    PermissionRepository permissionRepository;
 
     @Override
     public UserResponse createUser(UserCreationRequest request) {
@@ -114,6 +119,28 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTS));
 
         return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponse updateUserPermissions(String userId, UserPermissionUpdateRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        Set<String> permissionNames = request.getPermissions()
+                .stream()
+                .map(PermissionName::name)
+                .collect(Collectors.toSet());
+
+        Set<Permission> permissions = permissionNames
+                .stream()
+                .map(permissionName -> permissionRepository.findById(permissionName)
+                        .orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOT_FOUND)))
+                .collect(Collectors.toSet());
+
+        user.setPermissions(permissions);
+
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
 }
