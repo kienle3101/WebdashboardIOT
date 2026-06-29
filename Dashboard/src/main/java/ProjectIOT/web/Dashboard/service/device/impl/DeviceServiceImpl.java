@@ -105,6 +105,7 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DEVICE_' + #deviceCode)")
     public DeviceResponse updateDeviceStatusByCode(String deviceCode, DeviceStatusUpdateRequest request) {
         Device device = deviceRepository.findByDeviceCode(normalize(deviceCode))
                 .orElseThrow(() -> new AppException(ErrorCode.DEVICE_NOT_FOUND));

@@ -35,7 +35,7 @@ public class DeviceUsageLogServiceImpl implements DeviceUsageLogService {
     private final UserRepository userRepository;
 
     @Override
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('DEVICE_' + #request.deviceCode)")
     public DeviceUsageLogResponse createLog(DeviceUsageLogCreationRequest request) {
         User currentUser = getCurrentUser();
 
