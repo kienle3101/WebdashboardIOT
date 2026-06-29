@@ -26,6 +26,7 @@ public enum ErrorCode {
     DEVICE_TYPE_INVALID(2004, "Device type is invalid", HttpStatus.BAD_REQUEST),
     DEVICE_STATUS_INVALID(2005, "Device status is invalid", HttpStatus.BAD_REQUEST),
     DEVICE_CODE_TYPE_NOT_MATCH(2006, "Device code must match device type", HttpStatus.BAD_REQUEST),
+    DEVICE_USAGE_ACTION_INVALID(2007, "Device usage action is invalid", HttpStatus.BAD_REQUEST),
     ;
 
     
