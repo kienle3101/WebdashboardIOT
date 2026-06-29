@@ -16,6 +16,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +56,7 @@ public class DeviceServiceImpl implements DeviceService {
     public List<DeviceResponse> getAllDevices() {
         return deviceRepository.findAll()
                 .stream()
-                .map(deviceMapper::toDeviceResponse)
+                .map(this::toDeviceResponseWithPermission)
                 .toList();
     }
 
@@ -80,7 +82,7 @@ public class DeviceServiceImpl implements DeviceService {
         Device device = deviceRepository.findByDeviceCode(normalize(deviceCode))
                 .orElseThrow(() -> new AppException(ErrorCode.DEVICE_NOT_FOUND));
 
-        return deviceMapper.toDeviceResponse(device);
+        return toDeviceResponseWithPermission(deviceRepository.save(device));
     }
 
     @Override
@@ -114,7 +116,7 @@ public class DeviceServiceImpl implements DeviceService {
 
         device.setCurrentStatus(request.getCurrentStatus());
 
-        return deviceMapper.toDeviceResponse(deviceRepository.save(device));
+        return toDeviceResponseWithPermission(deviceRepository.save(device));
     }
 
     @Override
@@ -163,5 +165,28 @@ public class DeviceServiceImpl implements DeviceService {
 
     private String normalize(String value) {
         return value == null ? null : value.trim().toUpperCase();
+    }
+
+    private DeviceResponse toDeviceResponseWithPermission(Device device) {
+        DeviceResponse response = deviceMapper.toDeviceResponse(device);
+        response.setHasPermission(hasDevicePermission(device.getDeviceCode()));
+        return response;
+    }
+
+    private boolean hasDevicePermission(String deviceCode) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || authentication.getAuthorities() == null) {
+            return false;
+        }
+
+        String permissionName = "DEVICE_" + normalize(deviceCode);
+
+        return authentication.getAuthorities()
+                .stream()
+                .anyMatch(authority ->
+                        authority.getAuthority().equals("ROLE_ADMIN")
+                                || authority.getAuthority().equals(permissionName)
+                );
     }
 }
