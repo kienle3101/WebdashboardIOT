@@ -1,27 +1,43 @@
 import { useMemo, useState } from 'react';
-import { DoorOpen, Fan, Lightbulb, Lock, ShieldCheck, UserRound } from 'lucide-react';
-import { useDevices } from '../../hooks/useDevices';
+import { DoorOpen, Fan, Lightbulb, ShieldCheck, UserRound } from 'lucide-react';
 import { useUsers } from '../../hooks/useUsers';
 
 const permissionConfig = {
   DEVICE_LIGHT: { label: 'Đèn phòng khách', icon: Lightbulb, tint: '#2563eb', soft: '#eff6ff' },
   DEVICE_FAN: { label: 'Quạt trần', icon: Fan, tint: '#f59e0b', soft: '#fffbeb' },
   DEVICE_DOOR: { label: 'Cửa chính', icon: DoorOpen, tint: '#10b981', soft: '#ecfdf5' },
-  DEVICE_LOCKER: { label: 'Khóa cửa', icon: Lock, tint: '#ef4444', soft: '#fef2f2' },
 };
 
 export default function AdminPermsPage() {
   const { users, updatePermissions } = useUsers();
-  const { devices } = useDevices();
   const [selected, setSelected] = useState({});
 
   const permissionOptions = useMemo(() => Object.keys(permissionConfig), []);
+
+  const [savingUserId, setSavingUserId] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [saveError, setSaveError] = useState('');
 
   const handleToggle = (userId, permission) => {
     const current = selected[userId] ?? users.find((u) => u.id === userId)?.permissions ?? [];
     const next = current.includes(permission) ? current.filter((item) => item !== permission) : [...current, permission];
     setSelected((prev) => ({ ...prev, [userId]: next }));
-    updatePermissions({ id: userId, permissions: next });
+  };
+
+  const handleConfirm = async (userId) => {
+    setSuccessMessage('');
+    setSaveError('');
+    const permissions = selected[userId] ?? users.find((u) => u.id === userId)?.permissions ?? [];
+    setSavingUserId(userId);
+
+    try {
+      await updatePermissions({ id: userId, permissions });
+      setSuccessMessage('Cập nhật phân quyền thành công.');
+    } catch (error) {
+      setSaveError(error?.response?.data?.message || error.message || 'Không thể cập nhật phân quyền');
+    } finally {
+      setSavingUserId(null);
+    }
   };
 
   return (
@@ -33,7 +49,7 @@ export default function AdminPermsPage() {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', borderRadius: 999, background: '#eff6ff', color: '#1d4ed8', fontWeight: 600 }}>
           <ShieldCheck size={14} />
-          <span>{devices.length} thiết bị</span>
+          <span>3 thiết bị</span>
         </div>
       </div>
 
@@ -44,19 +60,13 @@ export default function AdminPermsPage() {
 
           return (
             <div key={user.id} style={{ border: '1px solid #e2e8f0', borderRadius: 16, padding: 16, background: 'linear-gradient(180deg,#f8fbff,#ffffff)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 42, height: 42, borderRadius: 12, background: '#e2e8f0', display: 'grid', placeItems: 'center', color: '#334155' }}>
-                    <UserRound size={20} />
-                  </div>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: 15 }}>{user.fullName}</div>
-                    <div style={{ fontSize: 12, color: '#64748b' }}>{user.username} • {user.role}</div>
-                  </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                <div style={{ width: 42, height: 42, borderRadius: 12, background: '#e2e8f0', display: 'grid', placeItems: 'center', color: '#334155' }}>
+                  <UserRound size={20} />
                 </div>
-
-                <div style={{ padding: '6px 10px', borderRadius: 999, background: '#f1f5f9', color: '#334155', fontSize: 12, fontWeight: 700 }}>
-                  {grantedCount} quyền
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 15 }}>{user.fullName}</div>
+                  <div style={{ fontSize: 12, color: '#64748b' }}>{user.username} • {user.role}</div>
                 </div>
               </div>
 
@@ -94,6 +104,25 @@ export default function AdminPermsPage() {
                     </label>
                   );
                 })}
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 16, gap: 12, flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={() => handleConfirm(user.id)}
+                  disabled={savingUserId === user.id}
+                  style={{
+                    padding: '10px 18px',
+                    borderRadius: 14,
+                    border: 'none',
+                    background: '#2563eb',
+                    color: '#fff',
+                    fontWeight: 700,
+                    cursor: savingUserId === user.id ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  {savingUserId === user.id ? 'Đang lưu...' : 'Xác nhận'}
+                </button>
               </div>
             </div>
           );

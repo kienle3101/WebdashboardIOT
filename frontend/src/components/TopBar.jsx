@@ -21,10 +21,10 @@ export default function TopBar({ user, onLogout, collapsed, onToggleCollapse }) 
         </button>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 12px', borderRadius: 14, background: '#f8fbff', border: '1px solid #eef0f3' }}>
           <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg,#2563eb,#60a5fa)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700 }}>
-            {user?.fullName?.[0] ?? 'U'}
+            {(user?.fullName || user?.username || 'U')[0]?.toUpperCase() ?? 'U'}
           </div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 14 }}>{user?.fullName ?? 'User'}</div>
+            <div style={{ fontWeight: 700, fontSize: 14 }}>{user?.fullName || user?.username || 'User'}</div>
             <div style={{ fontSize: 12, color: '#64748b' }}>{user?.role ?? 'USER'}</div>
           </div>
         </div>

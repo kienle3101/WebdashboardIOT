@@ -1,6 +1,13 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getCurrentUser, login, logout } from '../api/authApi';
 
+const normalizeUser = (user) => {
+  if (!user) return null;
+  const role = user.role || (Array.isArray(user.roles) && user.roles.some((item) => item?.name === 'ADMIN') ? 'ADMIN' : 'USER');
+  const fullName = user.fullName || user.username || '';
+  return { ...user, role, fullName };
+};
+
 export const useAuth = () => {
   const userQuery = useQuery({
     queryKey: ['currentUser'],
@@ -27,7 +34,7 @@ export const useAuth = () => {
   });
 
   return {
-    user: userQuery.data,
+    user: normalizeUser(userQuery.data),
     isLoading: userQuery.isLoading,
     login: loginMutation.mutateAsync,
     logout: logoutMutation.mutateAsync,

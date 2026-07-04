@@ -27,7 +27,7 @@ export const getWeeklyActivity = async () => {
   // return axiosClient.get('/api/dashboard/weekly-activity').then((res) => normalizeList(res.data));
 };
 
-export const getActivityLogs = async ({ limit, scope = 'all' } = {}) => {
+export const getActivityLogs = async ({ pageNo = 1, pageSize = 10, scope = 'all', limit } = {}) => {
   // TODO: replace with real endpoint
   const data = [
     { id: 1, time: '2026-06-30 08:30', user: 'Admin', device: 'Đèn phòng khách', action: 'Bật', source: 'App', result: 'Thành công' },
@@ -39,8 +39,20 @@ export const getActivityLogs = async ({ limit, scope = 'all' } = {}) => {
     { id: 7, time: '2026-06-29 22:20', user: 'Trần Thị B', device: 'Cửa chính', action: 'Đóng', source: 'App', result: 'Thành công' },
   ];
 
-  if (limit) return data.slice(0, limit);
-  return data;
-  // if (scope === 'me') return axiosClient.get('/api/activity-logs/me').then((res) => normalizeList(res.data));
-  // return axiosClient.get('/api/activity-logs', { params: { limit } }).then((res) => normalizeList(res.data));
+  if (limit !== undefined) {
+    return limit ? data.slice(0, limit) : data;
+  }
+
+  const total = data.length;
+  const start = (pageNo - 1) * pageSize;
+  const pagedData = data.slice(start, start + pageSize);
+
+  return {
+    data: pagedData,
+    total,
+    pageNo,
+    pageSize,
+  };
+  // if (scope === 'me') return axiosClient.get('/api/activity-logs/me', { params: { pageNo, pageSize } }).then((res) => normalizeList(res.data));
+  // return axiosClient.get('/api/activity-logs', { params: { pageNo, pageSize } }).then((res) => normalizeList(res.data));
 };

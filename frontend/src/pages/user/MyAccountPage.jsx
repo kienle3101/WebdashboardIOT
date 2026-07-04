@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function MyAccountPage() {
-  const user = JSON.parse(localStorage.getItem('smartHouseUser') || 'null');
+  const { user } = useAuth();
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
 

@@ -1,27 +1,37 @@
 import axiosClient from './axiosClient';
 
 const normalizeAuthResponse = (payload) => {
-  if (payload?.data) return payload.data;
+  if (payload?.data?.result !== undefined) return payload.data.result;
+  if (payload?.result !== undefined) return payload.result;
+  if (payload?.data !== undefined) return payload.data;
   return payload;
 };
 
+export const register = async ({ fullName, username, password }) => {
+  const response = await axiosClient.post('/users', { fullName, username, password });
+  return normalizeAuthResponse(response);
+};
+
 export const login = async ({ username, password }) => {
-  // TODO: replace with real endpoint
-  return Promise.resolve({
-    data: {
-      token: 'mock-jwt-token',
-      user: {
-        id: 1,
-        username,
-        fullName: username === 'admin' ? 'Admin SmartHouse' : 'Nguyễn Văn A',
-        role: username === 'admin' ? 'ADMIN' : 'USER',
-        permissions: username === 'admin'
-          ? ['DEVICE_LIGHT', 'DEVICE_FAN', 'DEVICE_DOOR', 'DEVICE_LOCKER']
-          : ['DEVICE_LIGHT'],
-      },
-    },
-  });
-  // return axiosClient.post('/api/auth/login', { username, password }).then(normalizeAuthResponse);
+  const tokenPayload = await axiosClient.post('/auth/token', { username, password }).then(normalizeAuthResponse);
+  const token = tokenPayload?.token ?? tokenPayload?.accessToken ?? null;
+
+  if (!token) {
+    throw new Error('Không nhận được token từ server.');
+  }
+
+  localStorage.setItem('smartHouseToken', token);
+
+  const user = await axiosClient.get('/users/myInfo').then(normalizeAuthResponse);
+  if (user) {
+    localStorage.setItem('smartHouseUser', JSON.stringify(user));
+  }
+
+  return {
+    token,
+    authenticated: true,
+    user,
+  };
 };
 
 export const logout = async () => {
@@ -30,8 +40,20 @@ export const logout = async () => {
 };
 
 export const getCurrentUser = async () => {
-  // TODO: replace with real endpoint
-  const user = JSON.parse(localStorage.getItem('smartHouseUser') || 'null');
-  return user;
-  // return axiosClient.get('/api/auth/me').then(normalizeAuthResponse);
+  const token = localStorage.getItem('smartHouseToken');
+  if (!token) return null;
+
+  try {
+    const user = await axiosClient.get('/users/myInfo').then(normalizeAuthResponse);
+    if (user) {
+      localStorage.setItem('smartHouseUser', JSON.stringify(user));
+    }
+    return user;
+  } catch (error) {
+    if (error.response?.status === 401) {
+      await logout();
+      return null;
+    }
+    throw error;
+  }
 };

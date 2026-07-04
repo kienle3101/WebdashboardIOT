@@ -1,20 +1,40 @@
 import axiosClient from './axiosClient';
 
-const normalizeList = (payload) => payload?.data ?? payload ?? [];
+const normalizeResult = (payload) => payload?.result ?? payload?.data?.result ?? payload?.data ?? payload;
 
-export const getDevices = async () => {
-  // TODO: replace with real endpoint
-  return [
-    { id: 1, name: 'Đèn phòng khách', type: 'LIGHT', status: 'ON', online: true, location: 'Phòng khách', permission: 'DEVICE_LIGHT' },
-    { id: 2, name: 'Quạt trần', type: 'FAN', status: 'ON', online: true, location: 'Phòng ngủ', permission: 'DEVICE_FAN' },
-    { id: 3, name: 'Cửa chính', type: 'DOOR', status: 'OFF', online: false, location: 'Cửa vào', permission: 'DEVICE_DOOR' },
-    { id: 4, name: 'Khóa cửa', type: 'LOCKER', status: 'OFF', online: true, location: 'Cửa sau', permission: 'DEVICE_LOCKER' },
-  ];
-  // return axiosClient.get('/api/devices').then((res) => normalizeList(res.data));
+const normalizeDeviceList = (payload) => {
+  const list = payload?.result ?? payload?.data?.result ?? payload?.data ?? payload;
+  if (!Array.isArray(list)) return [];
+  return list.filter((device) => device.deviceCode !== 'LOCKER' && device.deviceType !== 'LOCKER');
 };
 
-export const toggleDeviceState = async (id, status) => {
-  // TODO: replace with real endpoint
-  return { id, status };
-  // return axiosClient.patch(`/api/devices/${id}/state`, { status });
+export const getDevices = async () => {
+  const response = await axiosClient.get('/devices');
+  return normalizeDeviceList(response.data);
+};
+
+const buildTargetStatus = (deviceType, currentStatus) => {
+  if (deviceType === 'DOOR') {
+    return currentStatus === 'OPEN' ? 'CLOSED' : 'OPEN';
+  }
+  return currentStatus === 'ON' ? 'OFF' : 'ON';
+};
+
+export const toggleDeviceState = async ({ deviceCode, deviceType, currentStatus }) => {
+  const targetStatus = buildTargetStatus(deviceType, currentStatus);
+  const response = await axiosClient.post(`/devices/code/${encodeURIComponent(deviceCode)}/control`, {
+    targetStatus,
+    source: 'WEB',
+  });
+  return normalizeResult(response.data);
+};
+
+export const createDevice = async ({ deviceCode, deviceName, deviceType, currentStatus }) => {
+  const response = await axiosClient.post('/devices', {
+    deviceCode,
+    deviceName,
+    deviceType,
+    currentStatus,
+  });
+  return normalizeResult(response.data);
 };

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Activity, Boxes, CircleUserRound, History, LayoutDashboard, Shield, Users } from 'lucide-react';
+import { Activity, Boxes, CircleUserRound, History, LayoutDashboard, Shield, Users, Cable } from 'lucide-react';
 import Logo from './Logo';
 
 const adminItems = [
@@ -8,6 +8,7 @@ const adminItems = [
   { label: 'Người dùng', path: '/admin/users', icon: Users },
   { label: 'Phân quyền thiết bị', path: '/admin/permissions', icon: Shield },
   { label: 'Lịch sử sử dụng', path: '/admin/history', icon: History },
+  { label: 'Kết nối COM', path: '/admin/serial', icon: Cable },
   { label: 'Tài khoản', path: '/admin/account', icon: CircleUserRound },
 ];
 
