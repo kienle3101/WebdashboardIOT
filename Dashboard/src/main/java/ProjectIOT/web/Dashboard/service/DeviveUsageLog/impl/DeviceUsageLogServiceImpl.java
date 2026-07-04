@@ -85,40 +85,6 @@ public class DeviceUsageLogServiceImpl implements DeviceUsageLogService {
         return toPageResponse(pageData);
     }
 
-    @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    @Transactional(readOnly = true)
-    public PageResponse<DeviceUsageLogResponse> getLogsByUser(String userId, int pageNo, int pageSize) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-
-        Pageable pageable = createPageable(pageNo, pageSize);
-
-        Page<DeviceUsageLog> pageData = deviceUsageLogRepository.findByUserId(
-                userId,
-                pageable
-        );
-
-        return toPageResponse(pageData);
-    }
-
-    @Override
-    @PreAuthorize("hasRole('ADMIN')")
-    @Transactional(readOnly = true)
-    public PageResponse<DeviceUsageLogResponse> getLogsByDeviceCode(String deviceCode, int pageNo, int pageSize) {
-        Device device = deviceRepository.findByDeviceCode(normalize(deviceCode))
-                .orElseThrow(() -> new AppException(ErrorCode.DEVICE_NOT_FOUND));
-
-        Pageable pageable = createPageable(pageNo, pageSize);
-
-        Page<DeviceUsageLog> pageData = deviceUsageLogRepository.findByDeviceDeviceCode(
-                device.getDeviceCode(),
-                pageable
-        );
-
-        return toPageResponse(pageData);
-    }
-
     private Pageable createPageable(int pageNo, int pageSize) {
         int validPageNo = Math.max(pageNo, 1);
         int validPageSize = Math.max(pageSize, 1);

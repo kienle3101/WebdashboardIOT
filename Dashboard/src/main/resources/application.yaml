@@ -23,7 +23,9 @@ server:
   port: 8080
   servlet:
     context-path: /api/v1/smartHouse
-
+serial:
+  port: COM2
+  baud-rate: 9600
 
 jwt:
   singerKey: "PC8kxKGhdSmTjsgrnxy6r4qamn8fmrtkexw9EQCa02A="

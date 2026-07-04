@@ -56,31 +56,4 @@ public class DeviceUsageLogController {
                         .build());
     }
 
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<ApiResponse<PageResponse<DeviceUsageLogResponse>>> getLogsByUser(
-            @PathVariable String userId,
-            @RequestParam(defaultValue = "1") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize
-    ) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<PageResponse<DeviceUsageLogResponse>>builder()
-                        .code(1000)
-                        .message("Get device usage logs by user successfully")
-                        .result(deviceUsageLogService.getLogsByUser(userId, pageNo, pageSize))
-                        .build());
-    }
-
-    @GetMapping("/devices/{deviceCode}")
-    public ResponseEntity<ApiResponse<PageResponse<DeviceUsageLogResponse>>> getLogsByDeviceCode(
-            @PathVariable String deviceCode,
-            @RequestParam(defaultValue = "1") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize
-    ) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.<PageResponse<DeviceUsageLogResponse>>builder()
-                        .code(1000)
-                        .message("Get device usage logs by device successfully")
-                        .result(deviceUsageLogService.getLogsByDeviceCode(deviceCode, pageNo, pageSize))
-                        .build());
-    }
 }

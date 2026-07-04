@@ -27,6 +27,10 @@ public enum ErrorCode {
     DEVICE_STATUS_INVALID(2005, "Device status is invalid", HttpStatus.BAD_REQUEST),
     DEVICE_CODE_TYPE_NOT_MATCH(2006, "Device code must match device type", HttpStatus.BAD_REQUEST),
     DEVICE_USAGE_ACTION_INVALID(2007, "Device usage action is invalid", HttpStatus.BAD_REQUEST),
+
+    // serial / COM
+    SERIAL_PORT_OPEN_FAILED(3001, "Cannot open serial port", HttpStatus.INTERNAL_SERVER_ERROR),
+    SERIAL_PORT_SEND_FAILED(3002, "Cannot send command to serial port", HttpStatus.INTERNAL_SERVER_ERROR),
     ;
 
     

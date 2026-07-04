@@ -23,7 +23,7 @@ public class Device {
     @Column(name = "device_code", nullable = false, unique = true, length = 50)
     private String deviceCode;
 
-    @Column(name = "device_name", nullable = false, length = 100)
+    @Column(name = "device_name", nullable = false, length = 100, columnDefinition = "NVARCHAR(255)")
     private String deviceName;
 
     @Enumerated(EnumType.STRING)
