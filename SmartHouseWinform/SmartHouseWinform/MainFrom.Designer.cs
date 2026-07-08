@@ -28,410 +28,472 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.grbUserInfo = new System.Windows.Forms.GroupBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.grbComConnection = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.tbtnDisconnect = new System.Windows.Forms.Button();
-            this.btnConnect = new System.Windows.Forms.Button();
-            this.cboComPort = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.grbDeviceControl = new System.Windows.Forms.GroupBox();
+            this.pnlSidebar = new System.Windows.Forms.Panel();
+            this.btnLogout = new System.Windows.Forms.Button();
+            this.lblApiStatus = new System.Windows.Forms.Label();
+            this.lblRole = new System.Windows.Forms.Label();
+            this.lblUsername = new System.Windows.Forms.Label();
+            this.pnlHeader = new System.Windows.Forms.Panel();
+            this.lblHeaderSubtitle = new System.Windows.Forms.Label();
+            this.lblHeaderTitle = new System.Windows.Forms.Label();
+            this.pnlMain = new System.Windows.Forms.Panel();
+            this.grpDeviceControl = new System.Windows.Forms.GroupBox();
             this.grpDoor = new System.Windows.Forms.GroupBox();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
+            this.btnDoorClose = new System.Windows.Forms.Button();
+            this.btnDoorOpen = new System.Windows.Forms.Button();
+            this.lblDoorStatus = new System.Windows.Forms.Label();
+            this.lblDoorTitle = new System.Windows.Forms.Label();
             this.grpFan = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.label7 = new System.Windows.Forms.Label();
+            this.btnFanOff = new System.Windows.Forms.Button();
+            this.btnFanOn = new System.Windows.Forms.Button();
+            this.lblFanStatus = new System.Windows.Forms.Label();
+            this.lblFanTitle = new System.Windows.Forms.Label();
             this.grpLight = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.grpSystemStatus = new System.Windows.Forms.GroupBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
+            this.btnLightOff = new System.Windows.Forms.Button();
+            this.btnLightOn = new System.Windows.Forms.Button();
+            this.lblLightStatus = new System.Windows.Forms.Label();
+            this.lblLightTitle = new System.Windows.Forms.Label();
             this.grpRecentLogs = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.colTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colUser = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDevice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAction = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSource = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.grbUserInfo.SuspendLayout();
-            this.grbComConnection.SuspendLayout();
-            this.grbDeviceControl.SuspendLayout();
+            this.pnlSidebar.SuspendLayout();
+            this.pnlHeader.SuspendLayout();
+            this.pnlMain.SuspendLayout();
+            this.grpDeviceControl.SuspendLayout();
             this.grpDoor.SuspendLayout();
             this.grpFan.SuspendLayout();
             this.grpLight.SuspendLayout();
-            this.grpSystemStatus.SuspendLayout();
             this.grpRecentLogs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
-            // grbUserInfo
+            // pnlSidebar
             // 
-            this.grbUserInfo.Controls.Add(this.label3);
-            this.grbUserInfo.Controls.Add(this.label2);
-            this.grbUserInfo.Controls.Add(this.label1);
-            this.grbUserInfo.Location = new System.Drawing.Point(12, 12);
-            this.grbUserInfo.Name = "grbUserInfo";
-            this.grbUserInfo.Size = new System.Drawing.Size(272, 135);
-            this.grbUserInfo.TabIndex = 0;
-            this.grbUserInfo.TabStop = false;
-            this.grbUserInfo.Text = "User Information\n";
+            this.pnlSidebar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+            this.pnlSidebar.Controls.Add(this.btnLogout);
+            this.pnlSidebar.Controls.Add(this.lblApiStatus);
+            this.pnlSidebar.Controls.Add(this.lblRole);
+            this.pnlSidebar.Controls.Add(this.lblUsername);
+            this.pnlSidebar.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlSidebar.Location = new System.Drawing.Point(0, 0);
+            this.pnlSidebar.Name = "pnlSidebar";
+            this.pnlSidebar.Size = new System.Drawing.Size(250, 681);
+            this.pnlSidebar.TabIndex = 0;
             // 
-            // label3
+            // btnLogout
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(24, 101);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(139, 16);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "API Status: Connected";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
+            this.btnLogout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLogout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
+            this.btnLogout.FlatAppearance.BorderSize = 0;
+            this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLogout.ForeColor = System.Drawing.Color.White;
+            this.btnLogout.Location = new System.Drawing.Point(20, 630);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(210, 38);
+            this.btnLogout.TabIndex = 3;
+            this.btnLogout.Text = "LOGOUT";
+            this.btnLogout.UseVisualStyleBackColor = false;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
-            // label2
+            // lblApiStatus
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 67);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(80, 16);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Role: USER";
+            this.lblApiStatus.AutoSize = true;
+            this.lblApiStatus.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblApiStatus.ForeColor = System.Drawing.Color.White;
+            this.lblApiStatus.Location = new System.Drawing.Point(20, 130);
+            this.lblApiStatus.Name = "lblApiStatus";
+            this.lblApiStatus.Size = new System.Drawing.Size(130, 15);
+            this.lblApiStatus.TabIndex = 2;
+            this.lblApiStatus.Text = "Backend Status: Ready";
             // 
-            // label1
+            // lblRole
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(113, 16);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Username: admin";
+            this.lblRole.AutoSize = true;
+            this.lblRole.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRole.ForeColor = System.Drawing.Color.White;
+            this.lblRole.Location = new System.Drawing.Point(20, 80);
+            this.lblRole.Name = "lblRole";
+            this.lblRole.Size = new System.Drawing.Size(73, 19);
+            this.lblRole.TabIndex = 1;
+            this.lblRole.Text = "Role: USER";
             // 
-            // grbComConnection
+            // lblUsername
             // 
-            this.grbComConnection.Controls.Add(this.label5);
-            this.grbComConnection.Controls.Add(this.tbtnDisconnect);
-            this.grbComConnection.Controls.Add(this.btnConnect);
-            this.grbComConnection.Controls.Add(this.cboComPort);
-            this.grbComConnection.Controls.Add(this.label4);
-            this.grbComConnection.Location = new System.Drawing.Point(297, 17);
-            this.grbComConnection.Name = "grbComConnection";
-            this.grbComConnection.Size = new System.Drawing.Size(272, 297);
-            this.grbComConnection.TabIndex = 1;
-            this.grbComConnection.TabStop = false;
-            this.grbComConnection.Text = " COM Connection";
-            this.grbComConnection.Enter += new System.EventHandler(this.grbComConnection_Enter);
+            this.lblUsername.AutoSize = true;
+            this.lblUsername.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUsername.ForeColor = System.Drawing.Color.White;
+            this.lblUsername.Location = new System.Drawing.Point(20, 30);
+            this.lblUsername.Name = "lblUsername";
+            this.lblUsername.Size = new System.Drawing.Size(91, 21);
+            this.lblUsername.TabIndex = 0;
+            this.lblUsername.Text = "Username";
             // 
-            // label5
+            // pnlHeader
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(18, 234);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(133, 16);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Status: Disconnected";
-            this.label5.Click += new System.EventHandler(this.label5_Click);
+            this.pnlHeader.BackColor = System.Drawing.Color.White;
+            this.pnlHeader.Controls.Add(this.lblHeaderSubtitle);
+            this.pnlHeader.Controls.Add(this.lblHeaderTitle);
+            this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlHeader.Location = new System.Drawing.Point(250, 0);
+            this.pnlHeader.Name = "pnlHeader";
+            this.pnlHeader.Size = new System.Drawing.Size(1016, 100);
+            this.pnlHeader.TabIndex = 1;
             // 
-            // tbtnDisconnect
+            // lblHeaderSubtitle
             // 
-            this.tbtnDisconnect.Location = new System.Drawing.Point(105, 147);
-            this.tbtnDisconnect.Name = "tbtnDisconnect";
-            this.tbtnDisconnect.Size = new System.Drawing.Size(75, 35);
-            this.tbtnDisconnect.TabIndex = 3;
-            this.tbtnDisconnect.Text = "Disconnect";
-            this.tbtnDisconnect.UseVisualStyleBackColor = true;
+            this.lblHeaderSubtitle.AutoSize = true;
+            this.lblHeaderSubtitle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHeaderSubtitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+            this.lblHeaderSubtitle.Location = new System.Drawing.Point(30, 50);
+            this.lblHeaderSubtitle.Name = "lblHeaderSubtitle";
+            this.lblHeaderSubtitle.Size = new System.Drawing.Size(310, 20);
+            this.lblHeaderSubtitle.TabIndex = 1;
+            this.lblHeaderSubtitle.Text = "Control your assigned smart devices";
             // 
-            // btnConnect
+            // lblHeaderTitle
             // 
-            this.btnConnect.Location = new System.Drawing.Point(21, 147);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(75, 35);
-            this.btnConnect.TabIndex = 2;
-            this.btnConnect.Text = "Connect";
-            this.btnConnect.UseVisualStyleBackColor = true;
-            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            this.lblHeaderTitle.AutoSize = true;
+            this.lblHeaderTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHeaderTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+            this.lblHeaderTitle.Location = new System.Drawing.Point(30, 12);
+            this.lblHeaderTitle.Name = "lblHeaderTitle";
+            this.lblHeaderTitle.Size = new System.Drawing.Size(381, 32);
+            this.lblHeaderTitle.TabIndex = 0;
+            this.lblHeaderTitle.Text = "Smart House Dashboard";
             // 
-            // cboComPort
+            // pnlMain
             // 
-            this.cboComPort.FormattingEnabled = true;
-            this.cboComPort.Location = new System.Drawing.Point(21, 88);
-            this.cboComPort.Name = "cboComPort";
-            this.cboComPort.Size = new System.Drawing.Size(121, 24);
-            this.cboComPort.TabIndex = 1;
-            this.cboComPort.SelectedIndexChanged += new System.EventHandler(this.cboComPort_SelectedIndexChanged);
+            this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(247)))), ((int)(((byte)(251)))));
+            this.pnlMain.Controls.Add(this.grpRecentLogs);
+            this.pnlMain.Controls.Add(this.grpDeviceControl);
+            this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlMain.Location = new System.Drawing.Point(250, 100);
+            this.pnlMain.Name = "pnlMain";
+            this.pnlMain.Padding = new System.Windows.Forms.Padding(20);
+            this.pnlMain.Size = new System.Drawing.Size(1016, 581);
+            this.pnlMain.TabIndex = 2;
             // 
-            // label4
+            // grpDeviceControl
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(18, 48);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(64, 16);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "COM Port";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
-            // 
-            // grbDeviceControl
-            // 
-            this.grbDeviceControl.Controls.Add(this.grpDoor);
-            this.grbDeviceControl.Controls.Add(this.grpFan);
-            this.grbDeviceControl.Controls.Add(this.grpLight);
-            this.grbDeviceControl.Location = new System.Drawing.Point(12, 351);
-            this.grbDeviceControl.Name = "grbDeviceControl";
-            this.grbDeviceControl.Size = new System.Drawing.Size(531, 190);
-            this.grbDeviceControl.TabIndex = 2;
-            this.grbDeviceControl.TabStop = false;
-            this.grbDeviceControl.Text = " Device Control";
-            // 
-            // grpDoor
-            // 
-            this.grpDoor.Controls.Add(this.button5);
-            this.grpDoor.Controls.Add(this.button6);
-            this.grpDoor.Controls.Add(this.label8);
-            this.grpDoor.Location = new System.Drawing.Point(371, 42);
-            this.grpDoor.Name = "grpDoor";
-            this.grpDoor.Size = new System.Drawing.Size(160, 128);
-            this.grpDoor.TabIndex = 2;
-            this.grpDoor.TabStop = false;
-            this.grpDoor.Text = "Door";
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(16, 77);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(73, 26);
-            this.button5.TabIndex = 8;
-            this.button5.Text = "Close";
-            this.button5.UseVisualStyleBackColor = true;
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(16, 48);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 26);
-            this.button6.TabIndex = 7;
-            this.button6.Text = "Open";
-            this.button6.UseVisualStyleBackColor = true;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(16, 29);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(61, 16);
-            this.label8.TabIndex = 6;
-            this.label8.Text = "CLOSED";
-            // 
-            // grpFan
-            // 
-            this.grpFan.Controls.Add(this.button3);
-            this.grpFan.Controls.Add(this.button4);
-            this.grpFan.Controls.Add(this.label7);
-            this.grpFan.Location = new System.Drawing.Point(195, 42);
-            this.grpFan.Name = "grpFan";
-            this.grpFan.Size = new System.Drawing.Size(160, 128);
-            this.grpFan.TabIndex = 1;
-            this.grpFan.TabStop = false;
-            this.grpFan.Text = "Fan";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(6, 77);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(73, 26);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "Turn OFF";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(6, 48);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 26);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "Turn ON";
-            this.button4.UseVisualStyleBackColor = true;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 29);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(76, 16);
-            this.label7.TabIndex = 3;
-            this.label7.Text = "Status: OFF";
+            this.grpDeviceControl.Controls.Add(this.grpDoor);
+            this.grpDeviceControl.Controls.Add(this.grpFan);
+            this.grpDeviceControl.Controls.Add(this.grpLight);
+            this.grpDeviceControl.Location = new System.Drawing.Point(20, 20);
+            this.grpDeviceControl.Name = "grpDeviceControl";
+            this.grpDeviceControl.Size = new System.Drawing.Size(600, 280);
+            this.grpDeviceControl.TabIndex = 0;
+            this.grpDeviceControl.TabStop = false;
+            this.grpDeviceControl.Text = "Device Control";
+            this.grpDeviceControl.Visible = true;
             // 
             // grpLight
             // 
-            this.grpLight.Controls.Add(this.button2);
-            this.grpLight.Controls.Add(this.button1);
-            this.grpLight.Controls.Add(this.label6);
-            this.grpLight.Location = new System.Drawing.Point(18, 42);
+            this.grpLight.BackColor = System.Drawing.Color.White;
+            this.grpLight.Controls.Add(this.lblLightTitle);
+            this.grpLight.Controls.Add(this.lblLightStatus);
+            this.grpLight.Controls.Add(this.btnLightOn);
+            this.grpLight.Controls.Add(this.btnLightOff);
+            this.grpLight.Location = new System.Drawing.Point(15, 30);
             this.grpLight.Name = "grpLight";
-            this.grpLight.Size = new System.Drawing.Size(160, 128);
-            this.grpLight.TabIndex = 0;
+            this.grpLight.Size = new System.Drawing.Size(180, 220);
+            this.grpLight.TabIndex = 15;
             this.grpLight.TabStop = false;
-            this.grpLight.Text = " Room Light";
+            this.grpLight.Text = "Light";
             // 
-            // button2
+            // lblLightTitle
             // 
-            this.button2.Location = new System.Drawing.Point(6, 77);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(73, 26);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Turn OFF";
-            this.button2.UseVisualStyleBackColor = true;
+            this.lblLightTitle.AutoSize = true;
+            this.lblLightTitle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLightTitle.Location = new System.Drawing.Point(15, 20);
+            this.lblLightTitle.Name = "lblLightTitle";
+            this.lblLightTitle.Size = new System.Drawing.Size(77, 20);
+            this.lblLightTitle.TabIndex = 0;
+            this.lblLightTitle.Text = "Room Light";
             // 
-            // button1
+            // lblLightStatus
             // 
-            this.button1.Location = new System.Drawing.Point(6, 48);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 26);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Turn ON";
-            this.button1.UseVisualStyleBackColor = true;
+            this.lblLightStatus.AutoSize = true;
+            this.lblLightStatus.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLightStatus.ForeColor = System.Drawing.Color.Gray;
+            this.lblLightStatus.Location = new System.Drawing.Point(15, 50);
+            this.lblLightStatus.Name = "lblLightStatus";
+            this.lblLightStatus.Size = new System.Drawing.Size(64, 15);
+            this.lblLightStatus.TabIndex = 1;
+            this.lblLightStatus.Text = "Status: OFF";
             // 
-            // label6
+            // btnLightOn
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 29);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(76, 16);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "Status: OFF";
+            this.btnLightOn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+            this.btnLightOn.FlatAppearance.BorderSize = 0;
+            this.btnLightOn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLightOn.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLightOn.ForeColor = System.Drawing.Color.White;
+            this.btnLightOn.Location = new System.Drawing.Point(15, 85);
+            this.btnLightOn.Name = "btnLightOn";
+            this.btnLightOn.Size = new System.Drawing.Size(80, 35);
+            this.btnLightOn.TabIndex = 2;
+            this.btnLightOn.Text = "Turn ON";
+            this.btnLightOn.UseVisualStyleBackColor = false;
+            this.btnLightOn.Click += new System.EventHandler(this.btnLightOn_Click);
             // 
-            // grpSystemStatus
+            // btnLightOff
             // 
-            this.grpSystemStatus.Controls.Add(this.label11);
-            this.grpSystemStatus.Controls.Add(this.label10);
-            this.grpSystemStatus.Controls.Add(this.label9);
-            this.grpSystemStatus.Location = new System.Drawing.Point(30, 191);
-            this.grpSystemStatus.Name = "grpSystemStatus";
-            this.grpSystemStatus.Size = new System.Drawing.Size(185, 123);
-            this.grpSystemStatus.TabIndex = 3;
-            this.grpSystemStatus.TabStop = false;
-            this.grpSystemStatus.Text = "System Status ";
+            this.btnLightOff.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+            this.btnLightOff.FlatAppearance.BorderSize = 0;
+            this.btnLightOff.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLightOff.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLightOff.ForeColor = System.Drawing.Color.White;
+            this.btnLightOff.Location = new System.Drawing.Point(15, 130);
+            this.btnLightOff.Name = "btnLightOff";
+            this.btnLightOff.Size = new System.Drawing.Size(80, 35);
+            this.btnLightOff.TabIndex = 3;
+            this.btnLightOff.Text = "Turn OFF";
+            this.btnLightOff.UseVisualStyleBackColor = false;
+            this.btnLightOff.Click += new System.EventHandler(this.btnLightOff_Click);
             // 
-            // label11
+            // grpFan
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(24, 85);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(110, 16);
-            this.label11.TabIndex = 2;
-            this.label11.Text = "DOOR : CLOSED";
+            this.grpFan.BackColor = System.Drawing.Color.White;
+            this.grpFan.Controls.Add(this.lblFanTitle);
+            this.grpFan.Controls.Add(this.lblFanStatus);
+            this.grpFan.Controls.Add(this.btnFanOn);
+            this.grpFan.Controls.Add(this.btnFanOff);
+            this.grpFan.Location = new System.Drawing.Point(210, 30);
+            this.grpFan.Name = "grpFan";
+            this.grpFan.Size = new System.Drawing.Size(180, 220);
+            this.grpFan.TabIndex = 16;
+            this.grpFan.TabStop = false;
+            this.grpFan.Text = "Fan";
             // 
-            // label10
+            // lblFanTitle
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(24, 60);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(69, 16);
-            this.label10.TabIndex = 1;
-            this.label10.Text = "FAN : OFF";
+            this.lblFanTitle.AutoSize = true;
+            this.lblFanTitle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFanTitle.Location = new System.Drawing.Point(15, 20);
+            this.lblFanTitle.Name = "lblFanTitle";
+            this.lblFanTitle.Size = new System.Drawing.Size(31, 20);
+            this.lblFanTitle.TabIndex = 4;
+            this.lblFanTitle.Text = "Fan";
             // 
-            // label9
+            // lblFanStatus
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(24, 37);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(81, 16);
-            this.label9.TabIndex = 0;
-            this.label9.Text = "LIGHT : OFF";
+            this.lblFanStatus.AutoSize = true;
+            this.lblFanStatus.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFanStatus.ForeColor = System.Drawing.Color.Gray;
+            this.lblFanStatus.Location = new System.Drawing.Point(15, 50);
+            this.lblFanStatus.Name = "lblFanStatus";
+            this.lblFanStatus.Size = new System.Drawing.Size(64, 15);
+            this.lblFanStatus.TabIndex = 5;
+            this.lblFanStatus.Text = "Status: OFF";
+            // 
+            // btnFanOn
+            // 
+            this.btnFanOn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+            this.btnFanOn.FlatAppearance.BorderSize = 0;
+            this.btnFanOn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFanOn.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFanOn.ForeColor = System.Drawing.Color.White;
+            this.btnFanOn.Location = new System.Drawing.Point(15, 85);
+            this.btnFanOn.Name = "btnFanOn";
+            this.btnFanOn.Size = new System.Drawing.Size(80, 35);
+            this.btnFanOn.TabIndex = 6;
+            this.btnFanOn.Text = "Turn ON";
+            this.btnFanOn.UseVisualStyleBackColor = false;
+            this.btnFanOn.Click += new System.EventHandler(this.btnFanOn_Click);
+            // 
+            // btnFanOff
+            // 
+            this.btnFanOff.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+            this.btnFanOff.FlatAppearance.BorderSize = 0;
+            this.btnFanOff.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFanOff.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFanOff.ForeColor = System.Drawing.Color.White;
+            this.btnFanOff.Location = new System.Drawing.Point(15, 130);
+            this.btnFanOff.Name = "btnFanOff";
+            this.btnFanOff.Size = new System.Drawing.Size(80, 35);
+            this.btnFanOff.TabIndex = 7;
+            this.btnFanOff.Text = "Turn OFF";
+            this.btnFanOff.UseVisualStyleBackColor = false;
+            this.btnFanOff.Click += new System.EventHandler(this.btnFanOff_Click);
+            // 
+            // grpDoor
+            // 
+            this.grpDoor.BackColor = System.Drawing.Color.White;
+            this.grpDoor.Controls.Add(this.lblDoorTitle);
+            this.grpDoor.Controls.Add(this.lblDoorStatus);
+            this.grpDoor.Controls.Add(this.btnDoorOpen);
+            this.grpDoor.Controls.Add(this.btnDoorClose);
+            this.grpDoor.Location = new System.Drawing.Point(405, 30);
+            this.grpDoor.Name = "grpDoor";
+            this.grpDoor.Size = new System.Drawing.Size(180, 220);
+            this.grpDoor.TabIndex = 17;
+            this.grpDoor.TabStop = false;
+            this.grpDoor.Text = "Door";
+            // 
+            // lblDoorTitle
+            // 
+            this.lblDoorTitle.AutoSize = true;
+            this.lblDoorTitle.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDoorTitle.Location = new System.Drawing.Point(15, 20);
+            this.lblDoorTitle.Name = "lblDoorTitle";
+            this.lblDoorTitle.Size = new System.Drawing.Size(104, 20);
+            this.lblDoorTitle.TabIndex = 8;
+            this.lblDoorTitle.Text = "Automatic Door";
+            // 
+            // lblDoorStatus
+            // 
+            this.lblDoorStatus.AutoSize = true;
+            this.lblDoorStatus.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDoorStatus.ForeColor = System.Drawing.Color.Gray;
+            this.lblDoorStatus.Location = new System.Drawing.Point(15, 50);
+            this.lblDoorStatus.Name = "lblDoorStatus";
+            this.lblDoorStatus.Size = new System.Drawing.Size(82, 15);
+            this.lblDoorStatus.TabIndex = 9;
+            this.lblDoorStatus.Text = "Status: CLOSED";
+            // 
+            // btnDoorOpen
+            // 
+            this.btnDoorOpen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+            this.btnDoorOpen.FlatAppearance.BorderSize = 0;
+            this.btnDoorOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDoorOpen.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDoorOpen.ForeColor = System.Drawing.Color.White;
+            this.btnDoorOpen.Location = new System.Drawing.Point(15, 85);
+            this.btnDoorOpen.Name = "btnDoorOpen";
+            this.btnDoorOpen.Size = new System.Drawing.Size(80, 35);
+            this.btnDoorOpen.TabIndex = 10;
+            this.btnDoorOpen.Text = "OPEN";
+            this.btnDoorOpen.UseVisualStyleBackColor = false;
+            this.btnDoorOpen.Click += new System.EventHandler(this.btnDoorOpen_Click);
+            // 
+            // btnDoorClose
+            // 
+            this.btnDoorClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+            this.btnDoorClose.FlatAppearance.BorderSize = 0;
+            this.btnDoorClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDoorClose.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDoorClose.ForeColor = System.Drawing.Color.White;
+            this.btnDoorClose.Location = new System.Drawing.Point(15, 130);
+            this.btnDoorClose.Name = "btnDoorClose";
+            this.btnDoorClose.Size = new System.Drawing.Size(80, 35);
+            this.btnDoorClose.TabIndex = 11;
+            this.btnDoorClose.Text = "CLOSE";
+            this.btnDoorClose.UseVisualStyleBackColor = false;
+            this.btnDoorClose.Click += new System.EventHandler(this.btnDoorClose_Click);
             // 
             // grpRecentLogs
             // 
+            this.grpRecentLogs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.grpRecentLogs.Controls.Add(this.dataGridView1);
-            this.grpRecentLogs.Location = new System.Drawing.Point(575, 17);
+            this.grpRecentLogs.Location = new System.Drawing.Point(640, 20);
             this.grpRecentLogs.Name = "grpRecentLogs";
-            this.grpRecentLogs.Size = new System.Drawing.Size(762, 515);
-            this.grpRecentLogs.TabIndex = 4;
+            this.grpRecentLogs.Size = new System.Drawing.Size(356, 540);
+            this.grpRecentLogs.TabIndex = 1;
             this.grpRecentLogs.TabStop = false;
             this.grpRecentLogs.Text = "Recent Logs";
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colTime,
             this.colUser,
             this.colDevice,
             this.colAction,
+            this.colSource,
             this.colResult});
-            this.dataGridView1.Location = new System.Drawing.Point(44, 39);
+            this.dataGridView1.Location = new System.Drawing.Point(15, 25);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(678, 440);
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(326, 500);
             this.dataGridView1.TabIndex = 0;
             // 
             // colTime
             // 
+            this.colTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colTime.HeaderText = "Time";
             this.colTime.MinimumWidth = 6;
             this.colTime.Name = "colTime";
-            this.colTime.Width = 125;
             // 
             // colUser
             // 
+            this.colUser.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colUser.HeaderText = "User";
             this.colUser.MinimumWidth = 6;
             this.colUser.Name = "colUser";
-            this.colUser.Width = 125;
             // 
             // colDevice
             // 
+            this.colDevice.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colDevice.HeaderText = "Device";
             this.colDevice.MinimumWidth = 6;
             this.colDevice.Name = "colDevice";
-            this.colDevice.Width = 125;
             // 
             // colAction
             // 
+            this.colAction.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colAction.HeaderText = "Action";
             this.colAction.MinimumWidth = 6;
             this.colAction.Name = "colAction";
-            this.colAction.Width = 125;
+            // 
+            // colSource
+            // 
+            this.colSource.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colSource.HeaderText = "Source";
+            this.colSource.MinimumWidth = 6;
+            this.colSource.Name = "colSource";
             // 
             // colResult
             // 
+            this.colResult.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colResult.HeaderText = "Result";
             this.colResult.MinimumWidth = 6;
             this.colResult.Name = "colResult";
-            this.colResult.Width = 125;
             // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1365, 553);
-            this.Controls.Add(this.grpRecentLogs);
-            this.Controls.Add(this.grpSystemStatus);
-            this.Controls.Add(this.grbDeviceControl);
-            this.Controls.Add(this.grbComConnection);
-            this.Controls.Add(this.grbUserInfo);
+            this.ClientSize = new System.Drawing.Size(1266, 681);
+            this.Controls.Add(this.pnlMain);
+            this.Controls.Add(this.pnlHeader);
+            this.Controls.Add(this.pnlSidebar);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "MainFrom";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Smart House Control";
+            this.Text = "Smart House Control - Dashboard";
             this.Load += new System.EventHandler(this.MainFrom_Load);
-            this.grbUserInfo.ResumeLayout(false);
-            this.grbUserInfo.PerformLayout();
-            this.grbComConnection.ResumeLayout(false);
-            this.grbComConnection.PerformLayout();
-            this.grbDeviceControl.ResumeLayout(false);
-            this.grpDoor.ResumeLayout(false);
-            this.grpDoor.PerformLayout();
-            this.grpFan.ResumeLayout(false);
-            this.grpFan.PerformLayout();
+            this.pnlSidebar.ResumeLayout(false);
+            this.pnlSidebar.PerformLayout();
+            this.pnlHeader.ResumeLayout(false);
+            this.pnlHeader.PerformLayout();
+            this.pnlMain.ResumeLayout(false);
+            this.grpDeviceControl.ResumeLayout(false);
             this.grpLight.ResumeLayout(false);
             this.grpLight.PerformLayout();
-            this.grpSystemStatus.ResumeLayout(false);
-            this.grpSystemStatus.PerformLayout();
+            this.grpFan.ResumeLayout(false);
+            this.grpFan.PerformLayout();
+            this.grpDoor.ResumeLayout(false);
+            this.grpDoor.PerformLayout();
             this.grpRecentLogs.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
@@ -440,39 +502,38 @@
 
         #endregion
 
-        private System.Windows.Forms.GroupBox grbUserInfo;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.GroupBox grbComConnection;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button tbtnDisconnect;
-        private System.Windows.Forms.Button btnConnect;
-        private System.Windows.Forms.ComboBox cboComPort;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.GroupBox grbDeviceControl;
-        private System.Windows.Forms.GroupBox grpDoor;
-        private System.Windows.Forms.GroupBox grpFan;
-        private System.Windows.Forms.GroupBox grpLight;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.GroupBox grpSystemStatus;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Panel pnlSidebar;
+        private System.Windows.Forms.Button btnLogout;
+        private System.Windows.Forms.Label lblApiStatus;
+        private System.Windows.Forms.Label lblRole;
+        private System.Windows.Forms.Label lblUsername;
+        private System.Windows.Forms.Panel pnlHeader;
+        private System.Windows.Forms.Label lblHeaderSubtitle;
+        private System.Windows.Forms.Label lblHeaderTitle;
+        private System.Windows.Forms.Panel pnlMain;
         private System.Windows.Forms.GroupBox grpRecentLogs;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn colUser;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDevice;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAction;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSource;
         private System.Windows.Forms.DataGridViewTextBoxColumn colResult;
+        private System.Windows.Forms.GroupBox grpDeviceControl;
+        private System.Windows.Forms.GroupBox grpDoor;
+        private System.Windows.Forms.Button btnDoorClose;
+        private System.Windows.Forms.Button btnDoorOpen;
+        private System.Windows.Forms.Label lblDoorStatus;
+        private System.Windows.Forms.Label lblDoorTitle;
+        private System.Windows.Forms.GroupBox grpFan;
+        private System.Windows.Forms.Label lblFanTitle;
+        private System.Windows.Forms.Label lblFanStatus;
+        private System.Windows.Forms.Button btnFanOn;
+        private System.Windows.Forms.Button btnFanOff;
+        private System.Windows.Forms.GroupBox grpLight;
+        private System.Windows.Forms.Label lblLightTitle;
+        private System.Windows.Forms.Label lblLightStatus;
+        private System.Windows.Forms.Button btnLightOn;
+        private System.Windows.Forms.Button btnLightOff;
     }
 }
