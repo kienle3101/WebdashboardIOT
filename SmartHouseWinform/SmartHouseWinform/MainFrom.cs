@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace SmartHouseWinform
 {
@@ -14,9 +13,8 @@ namespace SmartHouseWinform
     {
         private string currentUser;
         private string currentRole = "USER";
-        private List<string> userPermissions;
-        private List<string> deviceStates; // Light, Fan, Door
-        private List<LogEntry> logs;
+        private List<string> userPermissions = new List<string>();
+        private List<LogEntry> logs = new List<LogEntry>();
 
         public MainFrom()
         {
@@ -28,123 +26,251 @@ namespace SmartHouseWinform
             currentUser = username;
         }
 
-        private void MainFrom_Load(object sender, EventArgs e)
+        private async void MainFrom_Load(object sender, EventArgs e)
         {
-            LoadMockPermissions();
-            LoadMockDevices();
-            LoadMockLogs();
-            UpdateUI();
-            ApplyPermissionToButtons();
             ApplyTheme();
-            RefreshDataGrid();
+
+            await LoadUserInfoFromApi();
+            await LoadDevicesFromApi();
+            await LoadLogsFromApi();
+
+            ApplyPermissionToButtons();
         }
 
-        private void LoadMockPermissions()
+        private HttpClient CreateClient()
         {
-            // Define permissions for each account
-            currentRole = "USER";
-            userPermissions = new List<string>();
+            HttpClient client = new HttpClient();
 
-            string usernameLower = currentUser.ToLower();
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", ApiConfig.Token);
 
-            switch (usernameLower)
+            return client;
+        }
+
+        private async Task LoadUserInfoFromApi()
+        {
+            try
             {
-                case "admin":
-                    // ADMIN: Full access to all devices
-                    currentRole = "ADMIN";
-                    userPermissions = new List<string> { "DEVICE_LIGHT", "DEVICE_FAN", "DEVICE_DOOR" };
-                    break;
+                using (HttpClient client = CreateClient())
+                {
+                    var response = await client.GetAsync(ApiConfig.BaseUrl + "/users/myInfo");
+                    string result = await response.Content.ReadAsStringAsync();
 
-                case "user1":
-                    // USER1: Light + Fan only (no Door)
-                    currentRole = "USER";
-                    userPermissions = new List<string> { "DEVICE_LIGHT", "DEVICE_FAN" };
-                    break;
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        lblApiStatus.Text = "Backend Status: Error";
+                        MessageBox.Show("Không lấy được thông tin user.");
+                        return;
+                    }
 
-                case "user2":
-                    // USER2: Light only (no Fan, no Door)
-                    currentRole = "USER";
-                    userPermissions = new List<string> { "DEVICE_LIGHT" };
-                    break;
+                    dynamic data = JsonConvert.DeserializeObject(result);
 
-                case "user3":
-                    // USER3: Door only (no Light, no Fan)
-                    currentRole = "USER";
-                    userPermissions = new List<string> { "DEVICE_DOOR" };
-                    break;
+                    currentUser = data.result.username;
+                    currentRole = data.result.roles[0].name;
 
-                default:
-                    // Default: No permissions
-                    userPermissions = new List<string>();
-                    break;
+                    userPermissions.Clear();
+
+                    foreach (var p in data.result.permissions)
+                    {
+                        userPermissions.Add((string)p.name);
+                    }
+
+                    lblUsername.Text = "Username: " + currentUser;
+                    lblRole.Text = "Role: " + currentRole;
+                    lblApiStatus.Text = "Backend Status: Ready";
+                }
             }
-
-            lblUsername.Text = $"Username: {currentUser}";
-            lblRole.Text = $"Role: {currentRole}";
-        }
-
-        private void LoadMockDevices()
-        {
-            deviceStates = new List<string> { "OFF", "OFF", "CLOSED" }; // Light, Fan, Door
-        }
-
-        private void LoadMockLogs()
-        {
-            logs = new List<LogEntry>
+            catch (Exception ex)
             {
-                new LogEntry { Time = "09:00", User = currentUser, Device = "LIGHT", Action = "LIGHT_ON", Source = "WINDOWS_FORM", Result = "SUCCESS" },
-                new LogEntry { Time = "09:15", User = currentUser, Device = "FAN", Action = "FAN_ON", Source = "WINDOWS_FORM", Result = "SUCCESS" },
-                new LogEntry { Time = "09:30", User = currentUser, Device = "LIGHT", Action = "LIGHT_OFF", Source = "WINDOWS_FORM", Result = "SUCCESS" },
-            };
+                lblApiStatus.Text = "Backend Status: Error";
+                MessageBox.Show("Lỗi API myInfo: " + ex.Message);
+            }
         }
 
-        private void UpdateUI()
+        private async Task LoadDevicesFromApi()
         {
-            lblLightStatus.Text = $"Status: {deviceStates[0]}";
-            lblFanStatus.Text = $"Status: {deviceStates[1]}";
-            lblDoorStatus.Text = $"Status: {deviceStates[2]}";
+            try
+            {
+                using (HttpClient client = CreateClient())
+                {
+                    var response = await client.GetAsync(ApiConfig.BaseUrl + "/devices");
+                    string result = await response.Content.ReadAsStringAsync();
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("Không lấy được danh sách thiết bị.");
+                        return;
+                    }
+
+                    dynamic data = JsonConvert.DeserializeObject(result);
+
+                    foreach (var device in data.result)
+                    {
+                        string code = device.deviceCode;
+                        string status = device.currentStatus;
+
+                        if (code == "LIGHT")
+                            lblLightStatus.Text = "Status: " + status;
+
+                        if (code == "FAN")
+                            lblFanStatus.Text = "Status: " + status;
+
+                        if (code == "DOOR")
+                            lblDoorStatus.Text = "Status: " + status;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi API devices: " + ex.Message);
+            }
+        }
+
+        private async Task LoadLogsFromApi()
+        {
+            try
+            {
+                using (HttpClient client = CreateClient())
+                {
+                    var response = await client.GetAsync(ApiConfig.BaseUrl + "/logs/myLogs");
+                    string result = await response.Content.ReadAsStringAsync();
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("Không lấy được logs.");
+                        return;
+                    }
+
+                    dynamic data = JsonConvert.DeserializeObject(result);
+
+                    logs.Clear();
+
+                    foreach (var item in data.result.content)
+                    {
+                        logs.Add(new LogEntry
+                        {
+                            Time = ((string)item.createdAt).Substring(11, 5),
+                            User = item.username,
+                            Device = item.deviceCode,
+                            Action = item.action,
+                            Source = item.source,
+                            Result = item.result
+                        });
+                    }
+
+                    RefreshDataGrid();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi API logs: " + ex.Message);
+            }
+        }
+
+        private bool HasPermission(string permission)
+        {
+            if (currentRole == "ADMIN") return true;
+            return userPermissions.Contains(permission);
         }
 
         private void ApplyPermissionToButtons()
         {
-            // Light buttons
-            if (!HasPermission("DEVICE_LIGHT"))
-            {
-                btnLightOn.Enabled = false;
-                btnLightOff.Enabled = false;
-                btnLightOn.BackColor = Color.LightGray;
-                btnLightOff.BackColor = Color.LightGray;
-            }
+            btnLightOn.Enabled = HasPermission("DEVICE_LIGHT");
+            btnLightOff.Enabled = HasPermission("DEVICE_LIGHT");
 
-            // Fan buttons
-            if (!HasPermission("DEVICE_FAN"))
-            {
-                btnFanOn.Enabled = false;
-                btnFanOff.Enabled = false;
-                btnFanOn.BackColor = Color.LightGray;
-                btnFanOff.BackColor = Color.LightGray;
-            }
+            btnFanOn.Enabled = HasPermission("DEVICE_FAN");
+            btnFanOff.Enabled = HasPermission("DEVICE_FAN");
 
-            // Door buttons
-            if (!HasPermission("DEVICE_DOOR"))
+            btnDoorOpen.Enabled = HasPermission("DEVICE_DOOR");
+            btnDoorClose.Enabled = HasPermission("DEVICE_DOOR");
+        }
+
+        private async Task ControlDevice(string deviceCode, string command)
+        {
+            try
             {
-                btnDoorOpen.Enabled = false;
-                btnDoorClose.Enabled = false;
-                btnDoorOpen.BackColor = Color.LightGray;
-                btnDoorClose.BackColor = Color.LightGray;
+                using (HttpClient client = CreateClient())
+                {
+                    var body = new
+                    {
+                        command = command,
+                        source = "WINDOWS_FORM"
+                    };
+
+                    string json = JsonConvert.SerializeObject(body);
+
+                    var content = new StringContent(
+                        json,
+                        System.Text.Encoding.UTF8,
+                        "application/json"
+                    );
+
+                    var response = await client.PostAsync(
+                        ApiConfig.BaseUrl + "/devices/code/" + deviceCode + "/control",
+                        content
+                    );
+
+                    string result = await response.Content.ReadAsStringAsync();
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("Điều khiển thiết bị thất bại.");
+                        await LoadLogsFromApi();
+                        return;
+                    }
+
+                    dynamic data = JsonConvert.DeserializeObject(result);
+
+                    string status = data.result.currentStatus;
+
+                    if (deviceCode == "LIGHT")
+                        lblLightStatus.Text = "Status: " + status;
+
+                    if (deviceCode == "FAN")
+                        lblFanStatus.Text = "Status: " + status;
+
+                    if (deviceCode == "DOOR")
+                        lblDoorStatus.Text = "Status: " + status;
+
+                    MessageBox.Show("Điều khiển thành công: " + command);
+
+                    await LoadLogsFromApi();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi API control: " + ex.Message);
             }
         }
 
-        private bool HasPermission(string devicePermission)
+        private async void btnLightOn_Click(object sender, EventArgs e)
         {
-            if (currentRole == "ADMIN") return true;
-            return userPermissions.Contains(devicePermission);
+            await ControlDevice("LIGHT", "LIGHT_ON");
         }
 
-        private void ApplyTheme()
+        private async void btnLightOff_Click(object sender, EventArgs e)
         {
-            // Apply modern theme colors
-            this.BackColor = Color.FromArgb(244, 247, 251);
+            await ControlDevice("LIGHT", "LIGHT_OFF");
+        }
+
+        private async void btnFanOn_Click(object sender, EventArgs e)
+        {
+            await ControlDevice("FAN", "FAN_ON");
+        }
+
+        private async void btnFanOff_Click(object sender, EventArgs e)
+        {
+            await ControlDevice("FAN", "FAN_OFF");
+        }
+
+        private async void btnDoorOpen_Click(object sender, EventArgs e)
+        {
+            await ControlDevice("DOOR", "DOOR_OPEN");
+        }
+
+        private async void btnDoorClose_Click(object sender, EventArgs e)
+        {
+            await ControlDevice("DOOR", "DOOR_CLOSE");
         }
 
         private void RefreshDataGrid()
@@ -152,116 +278,28 @@ namespace SmartHouseWinform
             dataGridView1.DataSource = null;
             dataGridView1.DataSource = logs;
 
-            // Format column headers
-            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(37, 99, 235);
-            dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor =
+                Color.FromArgb(37, 99, 235);
 
-            // Alternate row colors
-            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(244, 247, 251);
+            dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor =
+                Color.White;
+
+            dataGridView1.ColumnHeadersDefaultCellStyle.Font =
+                new Font("Segoe UI", 10F, FontStyle.Bold);
+
+            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor =
+                Color.FromArgb(244, 247, 251);
+
             dataGridView1.DefaultCellStyle.BackColor = Color.White;
-            dataGridView1.DefaultCellStyle.SelectionBackColor = Color.FromArgb(37, 99, 235);
+            dataGridView1.DefaultCellStyle.SelectionBackColor =
+                Color.FromArgb(37, 99, 235);
+
             dataGridView1.DefaultCellStyle.SelectionForeColor = Color.White;
         }
 
-        private void AddLogEntry(string device, string action, string result)
+        private void ApplyTheme()
         {
-            LogEntry entry = new LogEntry
-            {
-                Time = DateTime.Now.ToString("HH:mm"),
-                User = currentUser,
-                Device = device,
-                Action = action,
-                Source = "WINDOWS_FORM",
-                Result = result
-            };
-            logs.Insert(0, entry); // Add to top
-            RefreshDataGrid();
-        }
-
-        // Device Control Handlers
-        private void btnLightOn_Click(object sender, EventArgs e)
-        {
-            if (HasPermission("DEVICE_LIGHT"))
-            {
-                deviceStates[0] = "ON";
-                UpdateUI();
-                AddLogEntry("LIGHT", "LIGHT_ON", "SUCCESS");
-            }
-            else
-            {
-                MessageBox.Show("No permission to control this device.", "Permission Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void btnLightOff_Click(object sender, EventArgs e)
-        {
-            if (HasPermission("DEVICE_LIGHT"))
-            {
-                deviceStates[0] = "OFF";
-                UpdateUI();
-                AddLogEntry("LIGHT", "LIGHT_OFF", "SUCCESS");
-            }
-            else
-            {
-                MessageBox.Show("No permission to control this device.", "Permission Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void btnFanOn_Click(object sender, EventArgs e)
-        {
-            if (HasPermission("DEVICE_FAN"))
-            {
-                deviceStates[1] = "ON";
-                UpdateUI();
-                AddLogEntry("FAN", "FAN_ON", "SUCCESS");
-            }
-            else
-            {
-                MessageBox.Show("No permission to control this device.", "Permission Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void btnFanOff_Click(object sender, EventArgs e)
-        {
-            if (HasPermission("DEVICE_FAN"))
-            {
-                deviceStates[1] = "OFF";
-                UpdateUI();
-                AddLogEntry("FAN", "FAN_OFF", "SUCCESS");
-            }
-            else
-            {
-                MessageBox.Show("No permission to control this device.", "Permission Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void btnDoorOpen_Click(object sender, EventArgs e)
-        {
-            if (HasPermission("DEVICE_DOOR"))
-            {
-                deviceStates[2] = "OPEN";
-                UpdateUI();
-                AddLogEntry("DOOR", "DOOR_OPEN", "SUCCESS");
-            }
-            else
-            {
-                MessageBox.Show("No permission to control this device.", "Permission Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void btnDoorClose_Click(object sender, EventArgs e)
-        {
-            if (HasPermission("DEVICE_DOOR"))
-            {
-                deviceStates[2] = "CLOSED";
-                UpdateUI();
-                AddLogEntry("DOOR", "DOOR_CLOSE", "SUCCESS");
-            }
-            else
-            {
-                MessageBox.Show("No permission to control this device.", "Permission Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            this.BackColor = Color.FromArgb(244, 247, 251);
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
@@ -270,9 +308,13 @@ namespace SmartHouseWinform
             loginForm.Show();
             this.Close();
         }
+
+        private void pnlHeader_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 
-    // Data structure for logs
     public class LogEntry
     {
         public string Time { get; set; }

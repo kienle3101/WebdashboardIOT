@@ -4,7 +4,7 @@ spring:
   application:
     name: SmartHouse
   datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=smart_house_db;encrypt=false
+    url: jdbc:sqlserver://localhost:1434;databaseName=smart_house_db;encrypt=false;trustServerCertificate=true
     username: MSI
     password: 1234
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver

@@ -1,4 +1,4 @@
-package ProjectIOT.web.Dashboard;
+package  ProjectIOT.web.Dashboard;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
