@@ -1,5 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getUsers, deleteUser, updateUserPermissions } from '../api/userApi';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { deleteUser, getUsers, updateUserPermissions } from '../api/userApi';
 
 export const useUsers = () => {
   const queryClient = useQueryClient();
@@ -11,18 +12,28 @@ export const useUsers = () => {
 
   const deleteMutation = useMutation({
     mutationFn: deleteUser,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['users'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
   });
 
   const permissionsMutation = useMutation({
-    mutationFn: ({ id, permissions }) => updateUserPermissions(id, permissions),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['users'] }),
+    mutationFn: updateUserPermissions,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
   });
 
   return {
     users: usersQuery.data ?? [],
     isLoading: usersQuery.isLoading,
+    error: usersQuery.error,
+    refetchUsers: usersQuery.refetch,
+
     deleteUser: deleteMutation.mutateAsync,
+    isDeleting: deleteMutation.isPending,
+
     updatePermissions: permissionsMutation.mutateAsync,
+    isUpdatingPermissions: permissionsMutation.isPending,
   };
 };

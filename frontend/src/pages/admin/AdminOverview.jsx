@@ -152,7 +152,7 @@ export default function AdminOverview() {
           </table>
 
           <div style={{ textAlign: 'center', marginTop: 14 }}>
-            <a href="/admin/logs" style={{ fontSize: 13, color: '#2563eb', fontWeight: 600, textDecoration: 'none' }}>
+            <a href="/admin/history" style={{ fontSize: 13, color: '#2563eb', fontWeight: 600, textDecoration: 'none' }}>
               Xem tất cả
             </a>
           </div>

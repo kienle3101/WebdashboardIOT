@@ -1,58 +1,176 @@
 import axiosClient from './axiosClient';
 
-const normalizeList = (payload) => payload?.data ?? payload ?? [];
+const unwrapResponse = (payload) => {
+  return payload?.data?.result ?? payload?.result ?? payload?.data ?? payload;
+};
+
+const normalizePage = (payload) => {
+  const result = unwrapResponse(payload);
+
+  if (Array.isArray(result)) {
+    return {
+      content: result,
+      pageNo: 1,
+      pageSize: result.length,
+      totalElements: result.length,
+      totalPages: 1,
+      last: true,
+    };
+  }
+
+  return {
+    content: result?.content ?? [],
+    pageNo: result?.pageNo ?? 1,
+    pageSize: result?.pageSize ?? 10,
+    totalElements: result?.totalElements ?? result?.content?.length ?? 0,
+    totalPages: result?.totalPages ?? 1,
+    last: result?.last ?? true,
+  };
+};
+
+const formatDateTime = (value) => {
+  if (!value) return '';
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return value;
+
+  return date.toLocaleString('vi-VN', {
+    hour12: false,
+  });
+};
+
+const actionLabelMap = {
+  LIGHT_ON: 'Bật',
+  LIGHT_OFF: 'Tắt',
+  FAN_ON: 'Bật',
+  FAN_OFF: 'Tắt',
+  DOOR_OPEN: 'Mở',
+  DOOR_CLOSE: 'Đóng',
+};
+
+const resultLabelMap = {
+  SUCCESS: 'Thành công',
+  FAILED: 'Thất bại',
+};
+
+const normalizeLog = (log) => {
+  if (!log) return null;
+
+  return {
+    ...log,
+    time: formatDateTime(log.createdAt),
+    user: log.fullName || log.username || 'Không rõ',
+    device: log.deviceName || log.deviceCode || 'Không rõ',
+    action: actionLabelMap[log.action] ?? log.action ?? 'Không rõ',
+    source: log.source ?? 'WEB',
+    result: resultLabelMap[log.result] ?? log.result ?? 'Không rõ',
+  };
+};
+
+const fetchPageContent = async (url, params = {}) => {
+  const response = await axiosClient.get(url, { params });
+  return normalizePage(response).content;
+};
+
+export const getActivityLogs = async ({
+  pageNo = 1,
+  pageSize = 10,
+  scope = 'all',
+  limit,
+} = {}) => {
+  const endpoint = scope === 'me' ? '/logs/myLogs' : '/logs';
+
+  const response = await axiosClient.get(endpoint, {
+    params: {
+      pageNo,
+      pageSize: limit ?? pageSize,
+    },
+  });
+
+  const page = normalizePage(response);
+  const logs = page.content.map(normalizeLog).filter(Boolean);
+
+  if (limit !== undefined) {
+    return logs.slice(0, limit);
+  }
+
+  return {
+    data: logs,
+    total: page.totalElements,
+    pageNo: page.pageNo,
+    pageSize: page.pageSize,
+    totalPages: page.totalPages,
+    last: page.last,
+  };
+};
 
 export const getAdminDashboardStats = async () => {
-  // TODO: replace with real endpoint
+  const [usersResult, devicesResult, logsResult] = await Promise.allSettled([
+    fetchPageContent('/users', { pageNo: 0, pageSize: 100 }),
+    fetchPageContent('/devices'),
+    fetchPageContent('/logs', { pageNo: 1, pageSize: 200 }),
+  ]);
+
+  const users = usersResult.status === 'fulfilled' ? usersResult.value : [];
+  const devices = devicesResult.status === 'fulfilled' ? devicesResult.value : [];
+  const logs = logsResult.status === 'fulfilled' ? logsResult.value : [];
+
+  const today = new Date().toISOString().slice(0, 10);
+
+  const activeDevices = devices.filter((device) => {
+    const status = device.currentStatus ?? device.status;
+    return status === 'ON' || status === 'OPEN';
+  }).length;
+
+  const todayActions = logs.filter((log) => {
+    return String(log.createdAt ?? '').slice(0, 10) === today;
+  }).length;
+
   return {
-    totalUsers: 128,
-    totalDevices: 42,
-    activeDevices: 31,
-    todayActions: 184,
+    totalUsers: users.length,
+    totalDevices: devices.length,
+    activeDevices,
+    todayActions,
   };
-  // return axiosClient.get('/api/dashboard/admin-stats').then((res) => normalizeList(res.data));
 };
 
 export const getWeeklyActivity = async () => {
-  // TODO: replace with real endpoint
-  return [
-    { day: 'T2', count: 18 },
-    { day: 'T3', count: 24 },
-    { day: 'T4', count: 17 },
-    { day: 'T5', count: 29 },
-    { day: 'T6', count: 22 },
-    { day: 'T7', count: 35 },
-    { day: 'CN', count: 26 },
-  ];
-  // return axiosClient.get('/api/dashboard/weekly-activity').then((res) => normalizeList(res.data));
-};
+  const logs = await fetchPageContent('/logs', {
+    pageNo: 1,
+    pageSize: 200,
+  });
 
-export const getActivityLogs = async ({ pageNo = 1, pageSize = 10, scope = 'all', limit } = {}) => {
-  // TODO: replace with real endpoint
-  const data = [
-    { id: 1, time: '2026-06-30 08:30', user: 'Admin', device: 'Đèn phòng khách', action: 'Bật', source: 'App', result: 'Thành công' },
-    { id: 2, time: '2026-06-30 08:15', user: 'Nguyễn Văn A', device: 'Quạt trần', action: 'Tắt', source: 'Voice', result: 'Thành công' },
-    { id: 3, time: '2026-06-30 07:55', user: 'Trần Thị B', device: 'Cửa chính', action: 'Mở', source: 'App', result: 'Thành công' },
-    { id: 4, time: '2026-06-30 07:40', user: 'Admin', device: 'Khóa cửa', action: 'Khóa', source: 'App', result: 'Thành công' },
-    { id: 5, time: '2026-06-30 07:10', user: 'Nguyễn Văn A', device: 'Đèn phòng khách', action: 'Tắt', source: 'Schedule', result: 'Thành công' },
-    { id: 6, time: '2026-06-29 22:45', user: 'Admin', device: 'Quạt trần', action: 'Bật', source: 'App', result: 'Thành công' },
-    { id: 7, time: '2026-06-29 22:20', user: 'Trần Thị B', device: 'Cửa chính', action: 'Đóng', source: 'App', result: 'Thành công' },
-  ];
+  const dayLabels = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+  const today = new Date();
+  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
-  if (limit !== undefined) {
-    return limit ? data.slice(0, limit) : data;
+  const counts = new Map();
+
+  for (let offset = 6; offset >= 0; offset -= 1) {
+    const date = new Date(todayStart);
+    date.setDate(todayStart.getDate() - offset);
+    counts.set(date.toISOString().slice(0, 10), 0);
   }
 
-  const total = data.length;
-  const start = (pageNo - 1) * pageSize;
-  const pagedData = data.slice(start, start + pageSize);
+  logs.forEach((log) => {
+    if (!log.createdAt) return;
 
-  return {
-    data: pagedData,
-    total,
-    pageNo,
-    pageSize,
-  };
-  // if (scope === 'me') return axiosClient.get('/api/activity-logs/me', { params: { pageNo, pageSize } }).then((res) => normalizeList(res.data));
-  // return axiosClient.get('/api/activity-logs', { params: { pageNo, pageSize } }).then((res) => normalizeList(res.data));
+    const date = new Date(log.createdAt);
+    if (Number.isNaN(date.getTime())) return;
+
+    const key = date.toISOString().slice(0, 10);
+
+    if (counts.has(key)) {
+      counts.set(key, counts.get(key) + 1);
+    }
+  });
+
+  return Array.from(counts.entries()).map(([dateKey, count]) => {
+    const date = new Date(dateKey);
+    return {
+      day: dayLabels[date.getDay()],
+      count,
+    };
+  });
 };
