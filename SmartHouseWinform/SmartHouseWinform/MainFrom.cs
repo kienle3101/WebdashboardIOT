@@ -185,7 +185,7 @@ namespace SmartHouseWinform
             btnDoorClose.Enabled = HasPermission("DEVICE_DOOR");
         }
 
-        private async Task ControlDevice(string deviceCode, string command)
+        private async Task ControlDevice(string deviceCode, string targetStatus)
         {
             try
             {
@@ -193,7 +193,7 @@ namespace SmartHouseWinform
                 {
                     var body = new
                     {
-                        command = command,
+                        targetStatus = targetStatus,  // "ON", "OFF", "OPEN", "CLOSED"
                         source = "WINDOWS_FORM"
                     };
 
@@ -232,7 +232,7 @@ namespace SmartHouseWinform
                     if (deviceCode == "DOOR")
                         lblDoorStatus.Text = "Status: " + status;
 
-                    MessageBox.Show("Điều khiển thành công: " + command);
+                    MessageBox.Show("Điều khiển thành công: " + targetStatus);
 
                     await LoadLogsFromApi();
                 }
@@ -245,32 +245,32 @@ namespace SmartHouseWinform
 
         private async void btnLightOn_Click(object sender, EventArgs e)
         {
-            await ControlDevice("LIGHT", "LIGHT_ON");
+            await ControlDevice("LIGHT", "ON");
         }
 
         private async void btnLightOff_Click(object sender, EventArgs e)
         {
-            await ControlDevice("LIGHT", "LIGHT_OFF");
+            await ControlDevice("LIGHT", "OFF");
         }
 
         private async void btnFanOn_Click(object sender, EventArgs e)
         {
-            await ControlDevice("FAN", "FAN_ON");
+            await ControlDevice("FAN", "ON");
         }
 
         private async void btnFanOff_Click(object sender, EventArgs e)
         {
-            await ControlDevice("FAN", "FAN_OFF");
+            await ControlDevice("FAN", "OFF");
         }
 
         private async void btnDoorOpen_Click(object sender, EventArgs e)
         {
-            await ControlDevice("DOOR", "DOOR_OPEN");
+            await ControlDevice("DOOR", "OPEN");
         }
 
         private async void btnDoorClose_Click(object sender, EventArgs e)
         {
-            await ControlDevice("DOOR", "DOOR_CLOSE");
+            await ControlDevice("DOOR", "CLOSED");
         }
 
         private void RefreshDataGrid()
