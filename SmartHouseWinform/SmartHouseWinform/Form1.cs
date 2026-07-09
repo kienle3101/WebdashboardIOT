@@ -1,70 +1,102 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
+using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace SmartHouseWinform
 {
     public partial class LoginForm : Form
     {
-        // Hardcoded demo accounts
-        private Dictionary<string, string> validAccounts = new Dictionary<string, string>
-        {
-            { "admin", "123456" },
-            { "user1", "123456" },
-            { "user2", "123456" },
-            { "user3", "123456" }
-        };
-
         public LoginForm()
         {
             InitializeComponent();
         }
 
-        private void btnLogin_Click(object sender, EventArgs e)
+        private async void btnLogin_Click(object sender, EventArgs e)
         {
             string username = txtUsername.Text.Trim();
             string password = txtPassword.Text.Trim();
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(username) ||
+                string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Please enter both username and password.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Vui lòng nhập username và password."
+                );
+
                 return;
             }
 
-            // Check if account exists
-            if (!validAccounts.ContainsKey(username))
+            var body = new
             {
-                MessageBox.Show("Username not found.\n\nTest accounts:\n" +
-                    "• admin / 123456  (Full access to all devices)\n" +
-                    "• user1 / 123456  (Light + Fan)\n" +
-                    "• user2 / 123456  (Light only)\n" +
-                    "• user3 / 123456  (Door only)", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+                username = username,
+                password = password
+            };
 
-            // Check if password is correct
-            if (validAccounts[username] != password)
+            string json = JsonConvert.SerializeObject(body);
+
+            using (HttpClient client = new HttpClient())
             {
-                MessageBox.Show("Incorrect password.", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+                var content = new StringContent(
+                    json,
+                    Encoding.UTF8,
+                    "application/json"
+                );
 
-            // Login successful
-            MainFrom mainForm = new MainFrom();
-            mainForm.SetLoginUser(username);
-            mainForm.Show();
-            this.Hide();
+                try
+                {
+                    var response = await client.PostAsync(
+                        ApiConfig.BaseUrl + "/auth/token",
+                        content
+                    );
+
+                    string result =
+                        await response.Content.ReadAsStringAsync();
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("Đăng nhập thất bại.");
+                        return;
+                    }
+
+                    dynamic data =
+                        JsonConvert.DeserializeObject(result);
+
+                    ApiConfig.Token = data.result.token;
+
+                    MessageBox.Show(
+                        "Đăng nhập thành công."
+                    );
+
+                    MainFrom mainForm = new MainFrom();
+
+                    mainForm.SetLoginUser(username);
+
+                    mainForm.Show();
+
+                    this.Hide();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        "Lỗi gọi API: " + ex.Message
+                    );
+                }
+            }
         }
 
         private void btnExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void pnlCard_Paint(
+            object sender,
+            PaintEventArgs e)
+        {
+
         }
     }
 }
