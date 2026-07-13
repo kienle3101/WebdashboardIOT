@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import DeviceControlPanel from '../../components/DeviceControlPanel';
+import VoiceControlButton from '../../components/VoiceControlButton';
 import { useDevices } from '../../hooks/useDevices';
 
 const deviceOptions = [
@@ -9,7 +10,7 @@ const deviceOptions = [
 ];
 
 export default function AdminDevicesPage() {
-  const { devices, toggleDevice, createDevice, isLoading, isCreating } = useDevices();
+  const { devices, toggleDevice, createDevice, isLoading, isCreating, refetch } = useDevices();
   const [selectedDevice, setSelectedDevice] = useState(deviceOptions[0].value);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -61,6 +62,8 @@ export default function AdminDevicesPage() {
           Thêm thiết bị
         </button>
       </div>
+
+      <VoiceControlButton onSuccess={refetch} />
 
       {message && (
         <div style={{ borderRadius: 14, padding: 14, background: '#ecfdf5', color: '#166534', border: '1px solid #d1fae5' }}>{message}</div>

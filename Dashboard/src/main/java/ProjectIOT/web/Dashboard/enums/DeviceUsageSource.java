@@ -4,5 +4,6 @@ public enum DeviceUsageSource {
     WINDOWS_FORM,
     WEB,
     APP,
-    AUTO_SYSTEM
+    AUTO_SYSTEM,
+    VOICE   
 }

@@ -22,6 +22,7 @@ export const useDevices = () => {
   return {
     devices: devicesQuery.data ?? [],
     isLoading: devicesQuery.isLoading,
+    refetch: devicesQuery.refetch, 
     toggleDevice: toggleMutation.mutateAsync,
     isToggling: toggleMutation.isLoading,
     createDevice: createMutation.mutateAsync,
